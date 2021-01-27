@@ -1,0 +1,8 @@
+# Change Log
+All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
+
+## 0.1.0 - 2021-01-27
+### Added
+* Added the ability to send crashes via the http end point.
+* It uses RabbitMQ as a message broker.
+* The system can be configured using the resources/config.json file.
