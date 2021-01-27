@@ -2,6 +2,7 @@
   (:gen-class) 
   (:require [io.pedestal.http :as http]
             [langohr.core      :as rmq]
+            [crash-reporter.config :as config]
             [crash-reporter.queue-sender :as sender]
             [crash-reporter.crash-reporter :as service]))
 

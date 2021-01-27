@@ -11,3 +11,9 @@
          (config/get-connection-settings 
           {:slackHook "some-hook" 
            :rmqConf {:host "host" :username "someuser" :port 5677 :vhost "/vhost" :password "userpass"}}))))
+
+(deftest get-port-empty-test
+  (is (= 8080 (config/get-port {:slackHook "some-hook"}))))
+
+(deftest get-port-not-empty-test
+  (is (= 5050 (config/get-port {:slackHook "some-hook" :port 5050}))))

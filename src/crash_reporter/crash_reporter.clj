@@ -1,6 +1,7 @@
 (ns crash-reporter.crash-reporter 
   (:require [io.pedestal.http :as http]
             [crash-reporter.slack-sender :as slack]
+            [crash-reporter.config :as config]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [crash-reporter.queue-sender :as sender]))
@@ -25,4 +26,4 @@
               ::http/routes        routes
               ::http/resource-path "/public"
               ::http/type          :jetty
-              ::http/port          8080})
+              ::http/port          (config/get-port config/config)})

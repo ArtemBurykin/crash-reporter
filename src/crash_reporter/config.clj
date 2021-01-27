@@ -22,3 +22,10 @@
   (if (contains? config :rmqConf)
     (merge rmq/*default-config* (:rmqConf config))
     rmq/*default-config*))
+
+(defn get-port
+  "Gets the port where the server will perform"
+  [config]
+  (if (contains? config :port)
+    (:port config)
+    8080))
