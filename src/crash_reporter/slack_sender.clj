@@ -1,4 +1,5 @@
 (ns crash-reporter.slack-sender
+  (:gen-class)
   (:require [org.httpkit.client :as http-client]
             [crash-reporter.config :as config]
             [clojure.data.json :as json]))

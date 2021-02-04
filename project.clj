@@ -1,4 +1,4 @@
-(defproject crash-reporter "0.1.1"
+(defproject crash-reporter "0.1.2"
   :description "A crash reporter"
   :url "https://avesystems.ru"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -12,7 +12,6 @@
                  [org.clojure/data.json "1.0.0"]]
   :repl-options {:init-ns crash-reporter.server}
   :main crash-reporter.server
-  :profiles {:uberjar {:aot :all}
-             :test     {:dependencies   [[test-with-files "0.1.1"]
-                                        [http-kit.fake "0.2.1"]]
+  :profiles {:uberjar {:aot [crash-reporter.server]}
+             :test     {:dependencies   [[http-kit.fake "0.2.1"]]
                        :resource-paths ["test/resources"]}})

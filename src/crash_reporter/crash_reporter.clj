@@ -1,4 +1,5 @@
-(ns crash-reporter.crash-reporter 
+(ns crash-reporter.crash-reporter
+  (:gen-class)
   (:require [io.pedestal.http :as http]
             [crash-reporter.slack-sender :as slack]
             [crash-reporter.config :as config]

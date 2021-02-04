@@ -9,7 +9,7 @@
   [filename]
   (json/read-str (slurp filename) :key-fn keyword))
 
-(def config (parse-config (-> "config.json" io/resource io/file)))
+(def config (parse-config (-> "config.json" io/resource)))
 
 (defn get-slack-hook
   "Retrieves a URL of a slack hook to send a message"

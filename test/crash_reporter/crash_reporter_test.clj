@@ -1,8 +1,11 @@
-(ns crash-reporter.service-test
+(ns crash-reporter.crash-reporter-test
   (:require [clojure.test :refer :all]
             [crash-reporter.crash-reporter :as service]
+            [crash-reporter.queue-sender :as sender]
+            [clojure.java.io :as io]
             [io.pedestal.test :refer :all]
             [org.httpkit.fake :refer [with-fake-http]]
+            [crash-reporter.config :as config]
             [io.pedestal.http :as http]
             [clojure.data.json :as json]))
 
@@ -11,8 +14,9 @@
   (::http/service-fn (http/create-servlet service/service)))
 
 (deftest report-crash-test
-  (let [webhook-url "http://hooks.slack.com/services/fake-hook"] ;; the value is specified in test/resources/config.json
-    (with-fake-http [{:url webhook-url :method :post} {:status 200 :body "ok"}] 
+  (let [webhook-url (config/get-slack-hook (config/parse-config (-> "config.json" io/resource)))]
+    (with-fake-http [{:url webhook-url :method :post} {:status 200 :body "ok"}]
+      (sender/connect) ;; as we don't run the whole server, we connect here
       (is (= 200 (:status (response-for service
                                         :post "/report-crash"
                                         :headers {"Content-Type" "application/json"}

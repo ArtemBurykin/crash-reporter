@@ -1,8 +1,6 @@
 (ns crash-reporter.server
   (:gen-class) 
   (:require [io.pedestal.http :as http]
-            [langohr.core      :as rmq]
-            [crash-reporter.config :as config]
             [crash-reporter.queue-sender :as sender]
             [crash-reporter.crash-reporter :as service]))
 
@@ -10,8 +8,8 @@
 
 (defn -main
   "The entry-point for 'lein run'"
-  [& args]
+  []
   (println "\nStarting the crash report server..")
+  (sender/connect)
   (http/start runnable-service)
-  (rmq/close sender/ch)
-  (rmq/close sender/conn))
+  (sender/disconnect))
