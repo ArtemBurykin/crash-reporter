@@ -16,8 +16,9 @@ The example of the config.
 
 ```json
 {
-    "slackHook": "https://slack/some-hook",
-    "rmqConf": {
+    "slackHook": "https://slack/some-hook", // the web hook of Slack, it'll be triggered when the crash is received
+    "port": 6789, // the port to launch the app
+    "rmqConf": { // the config of RabbitMQ
         "host": "rmq-host.com",
         "port": 5672,
         "username": "user",

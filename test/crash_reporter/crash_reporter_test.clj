@@ -14,19 +14,36 @@
   (::http/service-fn (http/create-servlet service/service)))
 
 (deftest report-crash-test
-  (let [webhook-url (config/get-slack-hook (config/parse-config (-> "config.json" io/resource)))]
+  (let [webhook-url (config/get-slack-hook (config/parse-config (-> "config.json" io/resource)))
+        body (json/write-str {:message "test" :stack "test.js:12" :additionalData {:device "Mi Note 9" :os "Android 11"}})]
     (with-fake-http [{:url webhook-url :method :post} {:status 200 :body "ok"}]
       (sender/connect) ;; as we don't run the whole server, we connect here
       (is (= 200 (:status (response-for service
                                         :post "/report-crash"
                                         :headers {"Content-Type" "application/json"}
-                                        :body "{\"message\":\"test\", \"stack\":\"test.js:12\"}"))))
+                                        :body body))))
       (Thread/sleep 1000)))) ;; to complete sending of data to Slack
 
 (deftest message-handler-test
   (let [webhook-url "http://hooks.slack.com/services/fake-hook" ;; the value is specified in test/resources/config.json
-        payload (.getBytes "{\"message\":\"test\", \"stack\": \"test.js:12\"}")
-        expected-body {:text "test" :attachments [{:color "#ff0000" :title "Stack trace" :text "test.js:12"}]}]
+        deviceInfo {:device "Iphone 11" :os "IOS 11"}
+        payload (.getBytes (json/write-str {:message "test" :stack "test.js:12" :additionalData deviceInfo}))
+        expected-body {:text "test" :attachments [
+                                                  {:color "#ff0000" :title "Stack trace" :text "test.js:12"}
+                                                  {:color "#ff0000" :title "Additional Info" :text (json/write-str deviceInfo)}]}]
+    (with-fake-http [{:url webhook-url :method :post}
+                     (fn [_ opts _]
+                       (if (= (json/read-str (:body opts) :key-fn keyword) expected-body)
+                         {:status 200 :body "ok"}
+                         {:status 400 :body "incorrect body"}))]
+      (is (= "ok 200\n" (with-out-str (service/message-handler  nil nil payload)))))))
+
+(deftest message-handler-test-without-additional-data
+  (let [webhook-url "http://hooks.slack.com/services/fake-hook" ;; the value is specified in test/resources/config.json
+        payload (.getBytes (json/write-str {:message "test" :stack "test.js:12"}))
+        expected-body {:text "test" :attachments [
+                                                  {:color "#ff0000" :title "Stack trace" :text "test.js:12"}
+                                                  {:color "#ff0000" :title "Additional Info" :text "Not provided"}]}]
     (with-fake-http [{:url webhook-url :method :post}
                      (fn [_ opts _]
                        (if (= (json/read-str (:body opts) :key-fn keyword) expected-body)

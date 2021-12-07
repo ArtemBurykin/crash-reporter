@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## 0.1.3 - 2021-12-07
+### Added
+* Added the ability to send extra information about crashes.
+
 ## 0.1.2 - 2021-02-04
 ### Added
 * Added the ability to compile it like a jar file.

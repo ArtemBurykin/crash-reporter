@@ -1,4 +1,4 @@
-(defproject crash-reporter "0.1.2"
+(defproject crash-reporter "0.1.3"
   :description "A crash reporter"
   :url "https://avesystems.ru"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
