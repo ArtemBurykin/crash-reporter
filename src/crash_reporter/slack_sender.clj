@@ -1,10 +1,10 @@
 (ns crash-reporter.slack-sender
   (:gen-class)
   (:require [org.httpkit.client :as http-client]
-            [crash-reporter.config :as config]
+            [environ.core :refer [env]]
             [clojure.data.json :as json]))
 
-(def slack-webhook (config/get-slack-hook config/config))
+(def slack-webhook (env :slack-webhook))
 
 (defn send-to-slack
   "Sends the log of pings to the url of a slack web hook, returns a status of the request"

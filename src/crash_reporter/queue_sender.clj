@@ -3,9 +3,9 @@
   (:require [langohr.core      :as rmq]
             [clojure.data.json :as json]
             [langohr.queue     :as lq]
-            [crash-reporter.config :as config]
             [langohr.basic     :as lb]
             [langohr.consumers :as lc]
+            [environ.core :refer [env]]
             [langohr.channel   :as lch]))
 
 (def ^{:const true} default-exchange-name "")
@@ -16,7 +16,11 @@
 (defn connect
   "Connects the server to the RabbitMQ server"
   []
-  (reset! conn (rmq/connect (config/get-connection-settings config/config)))
+  (reset! conn (rmq/connect {:host (env :rabbitmq-host)
+                             :port (Integer/parseInt (env :rabbitmq-port)) ;; IMHERE: rewrite tests, create test containers environment
+                             :username (env :rabbitmq-user)
+                             :password (env :rabbitmq-pwd)
+                             :vhost "/"}))
   (reset! ch (lch/open @conn)))
 
 (defn disconnect

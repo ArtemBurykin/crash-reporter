@@ -1,13 +1,18 @@
 version: '3'
 services:
   reporter:
-    expose:
-      - 8080
     build:
       context: ./
     ports:
       - ${APP_PORT}:8080
     restart: always
+    environment:
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PWD=${RABBITMQ_PWD}
+      - RABBITMQ_HOST=amqp
+      - RABBITMQ_PORT=5672
+      - SLACK_WEBHOOK=${SLACK_WEBHOOK}
+      - INTERNAL_PORT=8080
 
   amqp:
     image: rabbitmq:3.9-management

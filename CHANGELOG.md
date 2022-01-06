@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## 0.1.5 - 2022-01-06
+### Added
+* Now the system should be configured by the env variables.
+
 ## 0.1.4 - 2021-12-29
 ### Added
 * Added docker-compose.yml to be able to use it as a docker container.

@@ -1,0 +1,26 @@
+version: '3'
+services:
+  d_reporter:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./
+    ports:
+      - ${APP_PORT}:8080
+    restart: always
+    environment:
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PWD=guest
+      - RABBITMQ_HOST=d_amqp
+      - RABBITMQ_PORT=5672
+      - SLACK_WEBHOOK=http://hooks.slack.com/fake-hook
+    volumes:
+      - ./:/app
+
+  d_amqp:
+    image: rabbitmq:3.9-management
+    expose:
+      - 5672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: always

@@ -2,7 +2,7 @@
   (:gen-class)
   (:require [io.pedestal.http :as http]
             [crash-reporter.slack-sender :as slack]
-            [crash-reporter.config :as config]
+            [environ.core :refer [env]]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [crash-reporter.queue-sender :as sender]))
@@ -23,9 +23,11 @@
   (route/expand-routes
    #{["/report-crash" :post [(body-params/body-params) report-crash] :route-name :report-crash]}))
 
+(defn- get-port [] (if (env :internal-port) (Integer/parseInt (env :internal-port)) 8080))
+
 (def service {:env                 :prod
               ::http/routes        routes
               ::http/host          "0.0.0.0"
               ::http/resource-path "/public"
               ::http/type          :jetty
-              ::http/port          (config/get-port config/config)})
+              ::http/port          (get-port)})
