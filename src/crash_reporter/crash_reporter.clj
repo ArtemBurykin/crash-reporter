@@ -5,12 +5,14 @@
             [environ.core :refer [env]]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
+            [crash-reporter.db-repository :as repository]
             [crash-reporter.queue-sender :as sender]))
 
 (defn message-handler
   "The handler to send crashes to Slack"
   [_ _ payload]
   (let [crash-data (String. payload "UTF-8")]
+    (repository/write-crash-to-db crash-data)
     (str (slack/send-to-slack crash-data))))
 
 (defn report-crash

@@ -13,6 +13,10 @@ services:
       - RABBITMQ_PORT=5672
       - SLACK_WEBHOOK=${SLACK_WEBHOOK}
       - INTERNAL_PORT=8080
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=crashes
 
   amqp:
     image: rabbitmq:3.9-management
@@ -22,3 +26,24 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
     restart: always
+
+  db:
+    image: postgres:12.5
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=crashes
+    volumes:
+      - pgdb_data_prod:/var/lib/postgresql/data
+
+  flyway:
+    image: flyway/flyway:7.3
+    depends_on:
+      - db
+    volumes:
+      - ./migrations:/flyway/sql
+    command: -url=jdbc:postgresql://db/crashes -user=${POSTGRES_USER} -password=${POSTGRES_PWD} -connectRetries=60 migrate
+
+volumes:
+  pgdb_data_prod:
+    driver: local

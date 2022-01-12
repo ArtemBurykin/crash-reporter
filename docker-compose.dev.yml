@@ -12,6 +12,10 @@ services:
       - RABBITMQ_PWD=guest
       - RABBITMQ_HOST=d_amqp
       - RABBITMQ_PORT=5672
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=user
+      - POSTGRES_HOST=d_db
+      - POSTGRES_DB=crashes
       - SLACK_WEBHOOK=http://hooks.slack.com/fake-hook
     volumes:
       - ./:/app
@@ -24,3 +28,24 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     restart: always
+
+  d_db:
+    image: postgres:12.5
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=user
+      - POSTGRES_DB=crashes
+    volumes:
+      - pgdb_data:/var/lib/postgresql/data
+
+  d_flyway:
+    image: flyway/flyway:7.3
+    depends_on:
+      - d_db
+    volumes:
+      - ./migrations:/flyway/sql
+    command: -url=jdbc:postgresql://d_db/crashes -user=user -password=123456 -connectRetries=60 migrate
+
+volumes:
+  pgdb_data:
+    driver: local

@@ -1,4 +1,4 @@
-(defproject crash-reporter "0.1.5"
+(defproject crash-reporter "0.2.0"
   :description "A crash reporter"
   :url "https://avesystems.ru"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -9,6 +9,7 @@
                  [http-kit "2.4.0-alpha5"]
                  [org.slf4j/slf4j-simple "1.7.28"]
                  [com.novemberain/langohr "5.1.0"]
+                 [org.postgresql/postgresql "42.3.1"]
                  [org.clojure/java.jdbc "0.7.12"]
                  [environ "1.2.0"]
                  [org.clojure/data.json "1.0.0"]]

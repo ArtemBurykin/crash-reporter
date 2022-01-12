@@ -1,12 +1,13 @@
 # crash-reporter
 
 Another crash reporter. Allows a user to send a crash report via the end point (HTTP).
-Later the crash is added to a rabbitMQ queue to be sent to a slack channel.
+Later the crash is added to a rabbitMQ queue to be sent to a slack channel. Also crashes are written to the DB.
 
 ## Requirements
 
 * RabbitMQ (2x or 3x)
 * JDK >8
+* PostgreSQL >12
 
 ## Usage with Docker
 
@@ -37,6 +38,10 @@ RABBITMQ_USER=guest
 RABBITMQ_PWD=guest
 RABBITMQ_HOST=localhost
 RABBITMQ_PORT=5672
+POSTGRES_PASSWORD=...
+POSTGRES_USER=...
+POSTGRES_HOST=...
+POSTGRES_DB=crashes
 SLACK_WEBHOOK=...
 ```
 
