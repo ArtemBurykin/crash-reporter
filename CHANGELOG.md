@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## 0.2.1 - 2022-04-25
+### Added
+* Made the db service restart always for the prod environment.
+
 ## 0.2.0 - 2022-01-12
 ### Added
 * Now the system writes crashes to the DB as well.

@@ -29,6 +29,7 @@ services:
 
   db:
     image: postgres:12.5
+    restart: always
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PWD}
       - POSTGRES_USER=${POSTGRES_USER}
